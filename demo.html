@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head profile="http://gmpg.org/xfn/11">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>jQuery Bottom Demo</title>
+	<script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="jquery.bottom-1.0.js"></script>
+	<script type="text/javascript">
+		let testObserver = function() {
+			let targetNode = document.querySelector('#wrap ol');
+			let option = { childList: true, subtree: true, attributes:true };
+			let observer = new MutationObserver(EventListener);
+			observer.observe(targetNode, option);
+			return observer;
+		};
+		let EventListener = function(mutation) {
+			mutation.forEach(function(m) {
+				for (let node of m.addedNodes) {
+					if (node.id === 'check') {
+						console.log('Target tagId is ' + node.id);
+					}
+				}
+			});
+		};
+		$(document).ready(function() {
+			$("#wrap").bottom({proximity: 0.05});
+			$("#wrap").bind("bottom", function() {
+				var obj = $(this);
+				// this event could be triggered multiple times
+				// while waiting for the content to grow or the area to be scrolled
+				if (!obj.data("loading")) {
+					// use a variable to skip processing until we get more data
+					obj.data("loading", true);
+					$('#wrap ol').append('<li>Loading...</li>');
+					// Use setTimeout to simulate an ajax call
+					setTimeout(function() {
+						$('#wrap ol li:last').remove();
+						$('#wrap ol').append('<li>Add Item</li><li>Add Item</li><li>Add Item</li><li>Add Item</li><li>Add Item</li><li>Add Item</li><li>Add Item</li><li>Add Item</li><div id="check">check</div>');
+						obj.data("loading", false);
+					}, 1500);
+				}
+			});
+			testObserver();
+		});
+	</script>
+	<style type="text/css">
+		#wrap { border: 1px solid #000; width: 400px; height: 200px; overflow: auto }
+	</style>
+</head>
+<body>
+<br /><br />
+	<div id="wrap">
+		<ol>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+			<li>Default Item</li>
+		</ol>
+	</div>
+</body>
+</html>
